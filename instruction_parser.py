@@ -44,7 +44,9 @@ class InstructionParser:
 
             print("--- Finished parsing lines ---")
 
-        return self.bots_by_number.values(), self.output_bins_by_number.values()
+        return list(self.bots_by_number.values()), list(
+            self.output_bins_by_number.values()
+        )
 
     def parse_and_assign_bot_instruction(
         self,
@@ -88,7 +90,7 @@ class InstructionParser:
             if existing_output := self.output_bins_by_number.get(target_number):
                 return existing_output
 
-            new_output = OutputBin(target_number)
+            new_output = OutputBin(int(target_number))
 
             self.output_bins_by_number[target_number] = new_output
 
