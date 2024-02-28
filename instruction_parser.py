@@ -1,4 +1,3 @@
-from typing import Literal
 from entities.bot import Bot
 from entities.output_bin import OutputBin
 
@@ -21,30 +20,21 @@ class InstructionParser:
 
                 # Instruction for bot
                 if words_per_line[0] == "bot":
-                    executing_bot = self.get_or_assign_bot(words_per_line[1])
-
-                    low_instruction_target_number = words_per_line[6]
-                    low_instruction_target = self.get_or_assign_target(
-                        low_instruction_target_number, words_per_line[5]
-                    )
-
-                    high_instruction_target_number = words_per_line[11]
-                    high_instruction_target = self.get_or_assign_target(
-                        high_instruction_target_number, words_per_line[10]
-                    )
-
-                    executing_bot.assign_instruction(
-                        low_instruction=low_instruction_target.assign_microchip,
-                        high_instruction=high_instruction_target.assign_microchip,
+                    self.parse_and_assign_bot_instruction(
+                        bot_number=words_per_line[1],
+                        low_instruction_type=words_per_line[5],
+                        low_instruction_number=words_per_line[6],
+                        high_instruction_type=words_per_line[10],
+                        high_instruction_number=words_per_line[11],
                     )
 
                     continue
 
                 # Value assignment to bot
                 if words_per_line[0] == "value":
-                    executing_bot = self.get_or_assign_bot(words_per_line[5])
-
-                    executing_bot.assign_microchip(int(words_per_line[1]))
+                    self.parse_and_assign_value_instruction(
+                        bot_number=words_per_line[5], value_number=words_per_line[1]
+                    )
 
                     continue
 
@@ -56,13 +46,45 @@ class InstructionParser:
 
         return self.bots_by_number.values(), self.output_bins_by_number.values()
 
+    def parse_and_assign_bot_instruction(
+        self,
+        bot_number: str,
+        low_instruction_type: str,
+        low_instruction_number: str,
+        high_instruction_type: str,
+        high_instruction_number: str,
+    ):
+        executing_bot = self.get_or_assign_bot(bot_number)
+
+        low_instruction_target = self.get_or_assign_target(
+            low_instruction_number, low_instruction_type
+        )
+
+        high_instruction_target = self.get_or_assign_target(
+            high_instruction_number, high_instruction_type
+        )
+
+        executing_bot.assign_instruction(
+            low_instruction=low_instruction_target.assign_microchip,
+            high_instruction=high_instruction_target.assign_microchip,
+        )
+
+    def parse_and_assign_value_instruction(
+        self,
+        bot_number: str,
+        value_number: str,
+    ):
+        executing_bot = self.get_or_assign_bot(bot_number)
+
+        executing_bot.assign_microchip(int(value_number))
+
     def get_or_assign_target(
-        self, target_number: str, target_type: str = "bot"
+        self, target_number: str, entity_type: str = "bot"
     ) -> Bot | OutputBin:
-        if target_type == "bot":
+        if entity_type == "bot":
             return self.get_or_assign_bot(target_number)
 
-        if target_type == "output":
+        if entity_type == "output":
             if existing_output := self.output_bins_by_number.get(target_number):
                 return existing_output
 
@@ -72,7 +94,7 @@ class InstructionParser:
 
             return new_output
 
-        raise Exception(f"Failed to create entity for target_type: {target_type}")
+        raise Exception(f"Failed to create entity for target_type: {entity_type}")
 
     def get_or_assign_bot(self, target_number: str):
         if existing_bot := self.bots_by_number.get(target_number):

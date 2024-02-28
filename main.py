@@ -1,3 +1,4 @@
+from functools import reduce
 from instruction_parser import InstructionParser
 
 bots, output_bins = InstructionParser(filename="./input.txt").parse()

@@ -18,12 +18,14 @@ class Bot:
     ) -> None:
         self.instructions.append((low_instruction, high_instruction))
 
-        if len(self.microchips) > 1:
-            self.execute_next_instruction()
+        self.check_microchips()
 
     def assign_microchip(self, microchip_value: int) -> None:
         self.microchips.append(microchip_value)
 
+        self.check_microchips()
+
+    def check_microchips(self):
         if len(self.microchips) > 1:
             self.execute_next_instruction()
 
