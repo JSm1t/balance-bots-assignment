@@ -43,4 +43,5 @@ pytest
 - Output 1: 13
 - Output 2: 61
 
+The values of the microchips in outputs 0, 1, and 2 multiplied is:
 5 * 13 * 61 = `3965`
