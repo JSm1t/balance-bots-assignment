@@ -1,10 +1,16 @@
-from instruction_parser import InstructionParser
+from src.executor import Executor
+from src.instruction_parser import InstructionParser
 
 
 def test_instruction_parser():
-    bots, output_bins = InstructionParser(
-        filename="./tests/unit/test_instructions.txt"
+    executor = Executor()
+
+    InstructionParser(
+        executor=executor, filename="./tests/integration/test_instructions.txt"
     ).parse()
+
+    bots = executor.get_all_bots()
+    output_bins = executor.get_all_outputs()
 
     bots.sort(key=lambda bot: bot.number)
     output_bins.sort(key=lambda output_bin: output_bin.number)
