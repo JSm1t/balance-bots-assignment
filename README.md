@@ -33,3 +33,14 @@ Then the tests can be run with:
 ```
 pytest
 ```
+
+## Answers
+### Part 1:
+`bot 73` is responsible for comparing microchips 17 & 61
+
+### Part 2:
+- Output 0: 5
+- Output 1: 13
+- Output 2: 61
+
+5 * 13 * 61 = `3965`
