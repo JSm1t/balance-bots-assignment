@@ -20,7 +20,7 @@ class InstructionParser:
 
                 # Instruction for bot
                 if words_per_line[0] == "bot":
-                    self.parse_and_assign_bot_instruction(
+                    self.assign_bot_instruction(
                         bot_number=words_per_line[1],
                         low_instruction_type=words_per_line[5],
                         low_instruction_number=words_per_line[6],
@@ -32,7 +32,7 @@ class InstructionParser:
 
                 # Value assignment to bot
                 if words_per_line[0] == "value":
-                    self.parse_and_assign_value_instruction(
+                    self.assign_value(
                         bot_number=words_per_line[5], value_number=words_per_line[1]
                     )
 
@@ -48,7 +48,7 @@ class InstructionParser:
             self.output_bins_by_number.values()
         )
 
-    def parse_and_assign_bot_instruction(
+    def assign_bot_instruction(
         self,
         bot_number: str,
         low_instruction_type: str,
@@ -71,7 +71,7 @@ class InstructionParser:
             high_instruction=high_instruction_target.assign_microchip,
         )
 
-    def parse_and_assign_value_instruction(
+    def assign_value(
         self,
         bot_number: str,
         value_number: str,
@@ -80,9 +80,7 @@ class InstructionParser:
 
         executing_bot.assign_microchip(int(value_number))
 
-    def get_or_assign_target(
-        self, target_number: str, entity_type: str = "bot"
-    ) -> Bot | OutputBin:
+    def get_or_assign_target(self, target_number: str, entity_type: str = "bot"):
         if entity_type == "bot":
             return self.get_or_assign_bot(target_number)
 

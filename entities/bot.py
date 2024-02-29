@@ -39,6 +39,9 @@ class Bot:
 
         self.microchips.sort()
 
+        if self.microchips == [17, 61]:
+            print("--- PART 1 answer: --- ")
+
         print(f"bot {self.number} is comparing microchips {self.microchips}")
 
         instruction_to_execute[0](self.microchips[0])
